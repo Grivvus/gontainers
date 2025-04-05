@@ -9,3 +9,42 @@ func TestIntStack(t *testing.T) {
 	s.Pop()
 	s.Push(14)
 }
+
+func TestPopFromEmptyStack(t *testing.T) {
+    defer func() {
+        if r := recover(); r != "Cannot pop from empty stack" {
+            t.Errorf("panic: %v", r)
+        }
+    }()
+
+	s := New[int]()
+	s.Pop()
+}
+
+func TestPushes(t *testing.T) {
+	s := New[int]()
+	for i := range 1000 {
+		s.Push(i)
+	}
+	if s.Len() != len(s.data) {
+		t.Error("Unexpected len of stack")
+	}
+}
+
+func TestElementOrder(t *testing.T) {
+	s := New[int]()
+	for i := range 1000 {
+		s.Push(i)
+	}
+
+	for i := 999; i >= 0; i-- {
+		elem := s.Pop()
+		if elem != i {
+			t.Errorf(`Unexpected order elements for Pop operation; expected %v, got %v`, i, elem)
+		}
+	}
+
+	if s.Len() != 0 {
+		t.Errorf(`Unexpected length of stack, expected %v, got %v`, 0, s.Len())
+	}
+}

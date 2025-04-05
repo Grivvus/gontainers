@@ -26,8 +26,12 @@ func (s *Stack[T]) Push(elem T) {
 
 func (s *Stack[T]) Pop() T {
 	if s.length == 0 {
-		panic("Cannot pop from empty stack.")
+		panic("Cannot pop from empty stack")
 	}
 	s.length--
 	return s.data[s.length]
+}
+
+func (s *Stack[T]) Len() int {
+	return s.length
 }
