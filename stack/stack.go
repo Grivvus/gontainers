@@ -19,7 +19,7 @@ func (s *Stack[T]) Push(elem T) {
 	if s.length == len(s.data) {
 		s.data = append(s.data, elem)
 	} else {
-		s.data[s.length + 1] = elem
+		s.data[s.length] = elem
 	}
 	s.length++
 }
