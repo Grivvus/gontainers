@@ -32,6 +32,10 @@ func (s *Stack[T]) Pop() T {
 	return s.data[s.length]
 }
 
+func (s *Stack[T]) GetLast() T {
+	return s.data[s.Len() - 1]
+}
+
 func (s *Stack[T]) Len() int {
 	return s.length
 }

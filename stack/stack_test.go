@@ -48,3 +48,20 @@ func TestElementOrder(t *testing.T) {
 		t.Errorf(`Unexpected length of stack, expected %v, got %v`, 0, s.Len())
 	}
 }
+
+func TestGetLastMethod(t *testing.T) {
+	s := New[int]()
+	s.Push(12)
+	if s.GetLast() != 12 {
+		t.Errorf(`Unexpected last element, expected %v, got %v`, 12, s.GetLast())
+	}
+	s.Push(13)
+	if s.GetLast() != 13 {
+		t.Errorf(`Unexpected last element, expected %v, got %v`, 13, s.GetLast())
+	}
+	s.Pop()
+	s.Push(15)
+	if s.GetLast() != 15 {
+		t.Errorf(`Unexpected last element, expected %v, got %v`, 15, s.GetLast())
+	}
+}
