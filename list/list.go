@@ -4,23 +4,24 @@ import (
 	"iter"
 )
 
-type node[T any] struct {
+type node[T comparable] struct {
 	value T
 	next  *node[T]
 }
 
-type List[T any] struct {
+type List[T comparable] struct {
 	head   *node[T]
+	tail   *node[T]
 	length int
 }
 
-func newNode[T any](value T) *node[T] {
+func newNode[T comparable](value T) *node[T] {
 	n := new(node[T])
 	n.value = value
 	return n
 }
 
-func New[T any]() *List[T] {
+func New[T comparable]() *List[T] {
 	l := new(List[T])
 	return l
 }
@@ -28,28 +29,89 @@ func New[T any]() *List[T] {
 func (l *List[T]) AddFirst(value T) {
 	tail := l.head
 	l.head = newNode(value)
-	l.head.next = tail
+	if tail == nil {
+		l.tail = l.head
+	} else {
+		l.head.next = tail
+	}
 	l.length++
 }
 
 func (l *List[T]) AddLast(value T) {
-	panic("TODO")
+	curTail := l.tail
+	node := newNode(value)
+	if curTail == nil {
+		l.tail = node
+		l.head = node
+	} else {
+		curTail.next = node
+		l.tail = curTail.next
+	}
+	l.length++
+}
+
+func (l *List[T]) GetFirst() T {
+	return l.head.value
+}
+
+func (l *List[T]) GetLast() T {
+	return l.tail.value
 }
 
 func (l *List[T]) PopFirst() T {
-	panic("TODO")
+	poped := l.head
+	l.head = poped.next
+	l.length--
+	return poped.value
 }
 
 func (l *List[T]) PopLast() T {
-	panic("TODO")
+	if l.Len() == 1 {
+		ret := l.head.value
+		l.head = nil
+		l.tail = nil
+		l.length = 0
+		return ret
+	}
+	iterator := l.head
+	l.length--
+	for range l.Len() - 1 {
+		iterator = iterator.next
+	}
+	ret := iterator.next.value
+	iterator.next = nil
+	return ret
 }
 
-func (l *List[T]) Remove(value T) T {
-	panic("TODO")
+func (l *List[T]) Remove(value T) int {
+	if l.Len() == 0 {
+		return -1
+	}
+	if l.head.value == value {
+		l.head = l.head.next
+		l.length--
+		return 0
+	}
+	iterator := l.head
+	for range l.length - 1 {
+		if iterator.next.value == value {
+			iterator.next = iterator.next.next
+			l.length--
+			return 0
+		}
+	}
+	return -1
 }
 
 func (l *List[T]) Find(value T) int {
-	panic("TODO")
+	iterator := l.head
+	for i := range l.length {
+		if iterator.value == value {
+			return i
+		}
+		iterator = iterator.next
+	}
+	return -1
 }
 
 func (l *List[T]) Len() int {
