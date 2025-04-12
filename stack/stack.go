@@ -9,8 +9,8 @@ func New[T any]() *Stack[T] {
 	return new(Stack[T]).Init()
 }
 
-// sets the stack state to initial
-// clears the stack and set Len to 0
+// Sets the stack state to initial.
+// Clears the stack and set Len to 0.
 func (s *Stack[T]) Init() *Stack[T] {
 	s.data = make([]T, 0)
 	s.length = 0

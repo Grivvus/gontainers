@@ -1,4 +1,4 @@
-// implementation of single linked list
+// implementation of single linked list.
 package list
 
 import (
@@ -96,9 +96,9 @@ func (l *List[T]) PopLast() T {
 	return ret
 }
 
-// removes first element == value
-// return 0 if element was deleted
-// return -1 otherwise
+// Removes first element == value.
+// return 0 if element was deleted,
+// return -1 otherwise.
 func (l *List[T]) Remove(value T) int {
 	if l.Len() == 0 {
 		return -1
@@ -119,7 +119,7 @@ func (l *List[T]) Remove(value T) int {
 	return -1
 }
 
-// return index of the first element == value
+// return index of the first element == value,
 // return -1 if no such element in list
 func (l *List[T]) Find(value T) int {
 	iterator := l.head
