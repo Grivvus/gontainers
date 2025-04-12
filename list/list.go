@@ -1,3 +1,4 @@
+// implementation of single linked list
 package list
 
 import (
@@ -51,14 +52,23 @@ func (l *List[T]) AddLast(value T) {
 }
 
 func (l *List[T]) GetFirst() T {
+	if l.head == nil {
+		panic("list is empty")
+	}
 	return l.head.value
 }
 
 func (l *List[T]) GetLast() T {
+	if l.tail == nil {
+		panic("list is empty")
+	}
 	return l.tail.value
 }
 
 func (l *List[T]) PopFirst() T {
+	if l.head == nil {
+		panic("list is empty")
+	}
 	poped := l.head
 	l.head = poped.next
 	l.length--
@@ -66,6 +76,9 @@ func (l *List[T]) PopFirst() T {
 }
 
 func (l *List[T]) PopLast() T {
+	if l.tail == nil {
+		panic("list is empty")
+	}
 	if l.Len() == 1 {
 		ret := l.head.value
 		l.head = nil
@@ -83,6 +96,9 @@ func (l *List[T]) PopLast() T {
 	return ret
 }
 
+// removes first element == value
+// return 0 if element was deleted
+// return -1 otherwise
 func (l *List[T]) Remove(value T) int {
 	if l.Len() == 0 {
 		return -1
@@ -103,6 +119,8 @@ func (l *List[T]) Remove(value T) int {
 	return -1
 }
 
+// return index of the first element == value
+// return -1 if no such element in list
 func (l *List[T]) Find(value T) int {
 	iterator := l.head
 	for i := range l.length {
