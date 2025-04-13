@@ -15,7 +15,7 @@ func TestPopFromEmptyStack(t *testing.T) {
 
 	s := New[int]()
 	_, err := s.Pop()
-	if err == nil || err.Error() != "Cannot Pop from empty stack" {
+	if err == nil || err.Error() != "Can't Pop from empty stack" {
 		t.Errorf("wrong result on pop from empty stack")
 	}
 }
