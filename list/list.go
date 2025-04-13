@@ -2,6 +2,7 @@
 package list
 
 import (
+	"errors"
 	"iter"
 )
 
@@ -51,40 +52,44 @@ func (l *List[T]) AddLast(value T) {
 	l.length++
 }
 
-func (l *List[T]) GetFirst() T {
-	if l.head == nil {
-		panic("list is empty")
+func (l *List[T]) GetFirst() (T, error) {
+	if l.IsEmpty() {
+		var zeroValue T
+		return zeroValue, errors.New("Can't Get element from empty list")
 	}
-	return l.head.value
+	return l.head.value, nil
 }
 
-func (l *List[T]) GetLast() T {
-	if l.tail == nil {
-		panic("list is empty")
+func (l *List[T]) GetLast() (T, error) {
+	if l.IsEmpty() {
+		var zeroValue T
+		return zeroValue, errors.New("Can't Get element from empty list")
 	}
-	return l.tail.value
+	return l.tail.value, nil
 }
 
-func (l *List[T]) PopFirst() T {
-	if l.head == nil {
-		panic("list is empty")
+func (l *List[T]) PopFirst() (T, error) {
+	if l.IsEmpty() {
+		var zeroValue T
+		return zeroValue, errors.New("Can't Pop from empty list")
 	}
 	poped := l.head
 	l.head = poped.next
 	l.length--
-	return poped.value
+	return poped.value, nil
 }
 
-func (l *List[T]) PopLast() T {
-	if l.tail == nil {
-		panic("list is empty")
+func (l *List[T]) PopLast() (T, error) {
+	if l.IsEmpty() {
+		var zeroValue T
+		return zeroValue, errors.New("Can't Pop from empty list")
 	}
 	if l.Len() == 1 {
 		ret := l.head.value
 		l.head = nil
 		l.tail = nil
 		l.length = 0
-		return ret
+		return ret, nil
 	}
 	iterator := l.head
 	l.length--
@@ -93,7 +98,7 @@ func (l *List[T]) PopLast() T {
 	}
 	ret := iterator.next.value
 	iterator.next = nil
-	return ret
+	return ret, nil
 }
 
 // Removes first element == value.
@@ -134,6 +139,10 @@ func (l *List[T]) Find(value T) int {
 
 func (l *List[T]) Len() int {
 	return l.length
+}
+
+func (l *List[T]) IsEmpty() bool {
+	return l.head == nil
 }
 
 func (l *List[T]) ElementsIter() iter.Seq[T] {

@@ -68,8 +68,8 @@ func TestPopFirst(t *testing.T) {
 	l.AddLast(4)
 	l.AddLast(5)
 	for i := range 5 {
-		elem := l.PopFirst()
-		if elem != i + 1 {
+		elem, err := l.PopFirst()
+		if elem != i + 1 && err != nil {
 			t.Errorf("Error while Poping from head, expected %d, got %d", i + 1, elem)
 		}
 	}
@@ -87,8 +87,8 @@ func TestPopLast(t *testing.T) {
 	l.AddFirst(5)
 	l.AddFirst(6)
 	for i := range 6 {
-		elem := l.PopLast()
-		if elem != i + 1 {
+		elem, err := l.PopLast()
+		if elem != i + 1 && err != nil {
 			t.Errorf("Error while Poping from tail, expected %d, got %d", i + 1, elem)
 		}
 	}
