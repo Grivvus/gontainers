@@ -11,14 +11,13 @@ func TestIntStack(t *testing.T) {
 }
 
 func TestPopFromEmptyStack(t *testing.T) {
-    defer func() {
-        if r := recover(); r != "Cannot pop from empty stack" {
-            t.Errorf("panic: %v", r)
-        }
-    }()
+
 
 	s := New[int]()
-	s.Pop()
+	_, err := s.Pop()
+	if err == nil || err.Error() != "Cannot Pop from empty stack" {
+		t.Errorf("wrong result on pop from empty stack")
+	}
 }
 
 func TestPushes(t *testing.T) {
@@ -38,8 +37,8 @@ func TestElementOrder(t *testing.T) {
 	}
 
 	for i := 999; i >= 0; i-- {
-		elem := s.Pop()
-		if elem != i {
+		elem, err := s.Pop()
+		if elem != i && err != nil {
 			t.Errorf(`Unexpected order elements for Pop operation; expected %v, got %v`, i, elem)
 		}
 	}

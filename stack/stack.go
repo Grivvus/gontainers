@@ -1,5 +1,9 @@
 package stack
 
+import (
+	"errors"
+)
+
 type Stack[T any] struct {
 	data []T
 	length int
@@ -26,12 +30,15 @@ func (s *Stack[T]) Push(elem T) {
 	s.length++
 }
 
-func (s *Stack[T]) Pop() T {
-	if s.length == 0 {
-		panic("Cannot pop from empty stack")
+// Removes and returns the last element in the stack;
+// If stack is empty return error
+func (s *Stack[T]) Pop() (T, error) {
+	if s.IsEmpty() {
+		var zeroValue T
+		return zeroValue, errors.New("Can't Pop from empty stack")
 	}
 	s.length--
-	return s.data[s.length]
+	return s.data[s.length], nil
 }
 
 func (s *Stack[T]) GetLast() T {
@@ -40,4 +47,8 @@ func (s *Stack[T]) GetLast() T {
 
 func (s *Stack[T]) Len() int {
 	return s.length
+}
+
+func (s *Stack[T]) IsEmpty() bool {
+	return s.length == 0
 }
