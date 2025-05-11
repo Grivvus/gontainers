@@ -26,3 +26,5 @@ jobs:
       run: go test -v ./list/*
     - name: Test stack
       run: go test -v ./stack/*
+    - name: Test heap
+      run: go test -v ./heap/*
