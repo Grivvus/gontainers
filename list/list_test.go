@@ -2,6 +2,7 @@ package list
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
 )
 
@@ -69,8 +70,8 @@ func TestPopFirst(t *testing.T) {
 	l.AddLast(5)
 	for i := range 5 {
 		elem, err := l.PopFirst()
-		if elem != i + 1 && err != nil {
-			t.Errorf("Error while Poping from head, expected %d, got %d", i + 1, elem)
+		if elem != i+1 && err != nil {
+			t.Errorf("Error while Poping from head, expected %d, got %d", i+1, elem)
 		}
 	}
 	if l.Len() != 0 {
@@ -88,29 +89,12 @@ func TestPopLast(t *testing.T) {
 	l.AddFirst(6)
 	for i := range 6 {
 		elem, err := l.PopLast()
-		if elem != i + 1 && err != nil {
-			t.Errorf("Error while Poping from tail, expected %d, got %d", i + 1, elem)
+		if elem != i+1 && err != nil {
+			t.Errorf("Error while Poping from tail, expected %d, got %d", i+1, elem)
 		}
 	}
 	if l.Len() != 0 {
 		t.Errorf("Error in PopLast operation, wrong final length epxected 0, got %d", l.Len())
-	}
-}
-
-func TestFind(t *testing.T) {
-	l := New[int]()
-	l.AddLast(1)
-	l.AddLast(2)
-	l.AddLast(3)
-	l.AddLast(4)
-	l.AddLast(5)
-	for i := range 5 {
-		if l.Find(i + 1) != i {
-			t.Errorf("Error in Find operation, wrong answer, expected %d, got %d", i, l.Find(i + 1))
-		}
-	}
-	if l.Find(123) != -1 {
-		t.Errorf("Error in Find operation, wrong answer, expected %d, got %d", -1, l.Find(123))
 	}
 }
 
@@ -122,11 +106,41 @@ func TestRemove(t *testing.T) {
 	l.AddLast(4)
 	l.AddLast(5)
 	for i := range 5 {
-		if l.Remove(i + 1) != 0 && l.Len() != 5 - i - 1 {
+		if l.Remove(i+1) != nil && l.Len() != 5-i-1 {
 			t.Errorf("Error in Remove operation")
 		}
 	}
-	if l.Remove(12) != -1 {
+	if l.Remove(12) == nil {
 		t.Errorf("Error in Remove operation; trying remove from empty list")
+	}
+}
+
+func BenchmarkIterateList(b *testing.B) {
+	l := New[int]()
+	for range 1000 {
+		l.AddLast(1248)
+	}
+
+	for b.Loop() {
+		for range l.ElementsIter() {
+		}
+	}
+}
+
+func BenchmarkAddStrLast(b *testing.B) {
+	for b.Loop() {
+		l := New[string]()
+		for i := range 10000 {
+			l.AddLast("iter" + strconv.Itoa(i))
+		}
+	}
+}
+
+func BenchmarkAddLast(b *testing.B) {
+	for b.Loop() {
+		l := New[int]()
+		for i := range 10000 {
+			l.AddLast(i)
+		}
 	}
 }

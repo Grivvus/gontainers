@@ -101,40 +101,39 @@ func (l *List[T]) PopLast() (T, error) {
 	return ret, nil
 }
 
-// Removes first element == value.
-// return 0 if element was deleted,
-// return -1 otherwise.
-func (l *List[T]) Remove(value T) int {
+// Removes the first element equal to value.
+// return error if no such element found.
+func (l *List[T]) Remove(value T) error {
 	if l.Len() == 0 {
-		return -1
+		return errors.New("no such element")
 	}
 	if l.head.value == value {
 		l.head = l.head.next
 		l.length--
-		return 0
+		return nil
 	}
 	iterator := l.head
 	for range l.length - 1 {
 		if iterator.next.value == value {
 			iterator.next = iterator.next.next
 			l.length--
-			return 0
+			return nil
 		}
 	}
-	return -1
+	return errors.New("no such element")
 }
 
-// return index of the first element == value,
-// return -1 if no such element in list
-func (l *List[T]) Find(value T) int {
+// return true if List contains value
+// return false otherwise
+func (l *List[T]) Contains(value T) bool {
 	iterator := l.head
-	for i := range l.length {
+	for range l.length {
 		if iterator.value == value {
-			return i
+			return true
 		}
 		iterator = iterator.next
 	}
-	return -1
+	return false
 }
 
 func (l *List[T]) Len() int {

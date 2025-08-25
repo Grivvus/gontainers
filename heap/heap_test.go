@@ -27,6 +27,19 @@ func TestMinHeap(t *testing.T) {
 	}
 }
 
+func BenchmarkMinHeap(b *testing.B) {
+	add1000Elems := func() {
+		heap := NewMinHeap[int]()
+		for range 1000 {
+			heap.Push(1366)
+		}
+	}
+
+	for b.Loop() {
+		add1000Elems()
+	}
+}
+
 func TestMaxHeap(t *testing.T) {
 	h := NewMaxHeap[int]()
 	_, err := h.Pop()

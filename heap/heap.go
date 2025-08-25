@@ -5,20 +5,6 @@ import (
 	"errors"
 )
 
-func min2[T cmp.Ordered](p1, p2 T) T {
-	if p1 < p2 {
-		return p1
-	}
-	return p2
-}
-
-func max2[T cmp.Ordered](p1, p2 T) T {
-	if p1 > p2 {
-		return p1
-	}
-	return p2
-}
-
 func isSmaller[T cmp.Ordered](p1, p2 T) bool {
 	return p1 < p2
 }
