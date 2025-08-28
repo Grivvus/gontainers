@@ -12,7 +12,6 @@ func TestIntStack(t *testing.T) {
 
 func TestPopFromEmptyStack(t *testing.T) {
 
-
 	s := New[int]()
 	_, err := s.Pop()
 	if err == nil || err.Error() != "Can't Pop from empty stack" {

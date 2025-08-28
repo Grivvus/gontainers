@@ -1,3 +1,4 @@
+// Generic data structure representing stack
 package stack
 
 import (
@@ -5,18 +6,19 @@ import (
 )
 
 type Stack[T any] struct {
-	data []T
+	data   []T
 	length int
 }
 
+// Default constructor
 func New[T any]() *Stack[T] {
-	return new(Stack[T]).Init()
+	return new(Stack[T]).Clear()
 }
 
 // Sets the stack state to initial.
 // Clears the stack and set Len to 0.
-func (s *Stack[T]) Init() *Stack[T] {
-	s.data = make([]T, 0)
+func (s *Stack[T]) Clear() *Stack[T] {
+	s.data = s.data[:]
 	s.length = 0
 	return s
 }
@@ -42,7 +44,7 @@ func (s *Stack[T]) Pop() (T, error) {
 }
 
 func (s *Stack[T]) GetLast() T {
-	return s.data[s.Len() - 1]
+	return s.data[s.Len()-1]
 }
 
 func (s *Stack[T]) Len() int {
