@@ -1,1 +1,1 @@
-## go library with some generic containers i missing in standart library
+## go library with some generic containers I missing in standard library
