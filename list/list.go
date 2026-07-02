@@ -6,6 +6,9 @@ import (
 	"iter"
 )
 
+var ErrNoSuchElement = errors.New("no such element")
+var ErrPopFromEmpty = errors.New("can't pop from empty list")
+
 type node[T comparable] struct {
 	value T
 	next  *node[T]
@@ -63,7 +66,7 @@ func (l *List[T]) GetFirst() (T, error) {
 func (l *List[T]) GetLast() (T, error) {
 	if l.IsEmpty() {
 		var zeroValue T
-		return zeroValue, errors.New("Can't Get element from empty list")
+		return zeroValue, ErrPopFromEmpty
 	}
 	return l.tail.value, nil
 }
@@ -71,7 +74,7 @@ func (l *List[T]) GetLast() (T, error) {
 func (l *List[T]) PopFirst() (T, error) {
 	if l.IsEmpty() {
 		var zeroValue T
-		return zeroValue, errors.New("Can't Pop from empty list")
+		return zeroValue, ErrPopFromEmpty
 	}
 	poped := l.head
 	l.head = poped.next
@@ -82,7 +85,7 @@ func (l *List[T]) PopFirst() (T, error) {
 func (l *List[T]) PopLast() (T, error) {
 	if l.IsEmpty() {
 		var zeroValue T
-		return zeroValue, errors.New("Can't Pop from empty list")
+		return zeroValue, ErrPopFromEmpty
 	}
 	if l.Len() == 1 {
 		ret := l.head.value
@@ -105,7 +108,7 @@ func (l *List[T]) PopLast() (T, error) {
 // return error if no such element found.
 func (l *List[T]) Remove(value T) error {
 	if l.Len() == 0 {
-		return errors.New("no such element")
+		return ErrNoSuchElement
 	}
 	if l.head.value == value {
 		l.head = l.head.next
@@ -120,7 +123,7 @@ func (l *List[T]) Remove(value T) error {
 			return nil
 		}
 	}
-	return errors.New("no such element")
+	return ErrNoSuchElement
 }
 
 // return true if List contains value

@@ -1,68 +1,77 @@
-package list
+package list_test
 
 import (
-	"fmt"
 	"strconv"
 	"testing"
+
+	"github.com/Grivvus/gontainers/list"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAddFirst(t *testing.T) {
-	l := New[int]()
+	l := list.New[int]()
 	l.AddFirst(12)
 	l.AddFirst(13)
-	if l.Len() != 2 {
-		t.Errorf("Unexpeted list Len, expeted %v, got %v", 2, l.Len())
-	}
-	fmt.Println("should be 12, 13")
-	for elem := range l.ElementsIter() {
-		fmt.Println(elem)
-	}
+	assert.Equal(t, 2, l.Len())
+	first, err := l.GetFirst()
+	assert.NoError(t, err)
+	last, err := l.GetLast()
+	assert.NoError(t, err)
+	assert.Equal(t, 13, first)
+	assert.Equal(t, 12, last)
 }
 
 func TestAddLast(t *testing.T) {
-	l := New[int]()
+	l := list.New[int]()
 	l.AddLast(3)
-	if l.Len() != 1 && l.tail.value != 3 {
-		t.Error("Error in AddLast operation in empty list")
-	}
+	last, err := l.GetLast()
+	assert.NoError(t, err)
+	assert.Equal(t, 1, l.Len())
+	assert.Equal(t, 3, last)
 	l.AddLast(14)
-	if l.Len() != 2 && l.tail.value != 14 && l.head.value != 3 {
-		t.Error("Error in AddLast operation in existing list")
-	}
+	first, err := l.GetFirst()
+	assert.NoError(t, err)
+	last, err = l.GetLast()
+	assert.NoError(t, err)
+	assert.Equal(t, 2, l.Len())
+	assert.Equal(t, 14, last)
+	assert.Equal(t, 3, first)
 }
 
 func TestAddLastAndAddFirst(t *testing.T) {
-	l := New[int]()
+	l := list.New[int]()
 	l.AddLast(3)
-	if l.Len() != 1 && l.tail.value == 3 {
-		t.Errorf("Error in AddLast operation in empty list")
-	}
+	last, err := l.GetLast()
+	assert.NoError(t, err)
+	assert.Equal(t, 1, l.Len())
+	assert.Equal(t, 3, last)
 	l.AddFirst(13)
-	if l.Len() != 2 && l.head.value != 13 && l.tail.value != 3 && l.head.next != l.tail {
-		t.Errorf("Error id AddFirst after AddLast")
-	}
+	first, err := l.GetFirst()
+	assert.NoError(t, err)
+	last, err = l.GetLast()
+	assert.NoError(t, err)
+	assert.Equal(t, 2, l.Len())
+	assert.Equal(t, 13, first)
+	assert.Equal(t, 3, last)
 }
 
 func TestAddFirstAndAddLast(t *testing.T) {
-	l := New[int]()
+	l := list.New[int]()
 	l.AddFirst(3)
 	l.AddLast(14)
-	if l.Len() != 2 && l.tail.value != 14 {
-		t.Errorf("Error in AddLast operation, value of last element expected %d, got %d", 14, l.tail.value)
-	}
+	last, err := l.GetLast()
+	assert.NoError(t, err)
+	assert.Equal(t, 2, l.Len())
+	assert.Equal(t, 14, last)
 	l.AddLast(15)
-	if l.Len() != 3 && l.tail.value != 15 {
-		t.Errorf("Error in AddLast operation, value of last element expected %d, got %d", 15, l.tail.value)
-	}
-
-	fmt.Println("should be 3, 14, 15")
-	for elem := range l.ElementsIter() {
-		fmt.Println(elem)
-	}
+	last, err = l.GetLast()
+	assert.NoError(t, err)
+	assert.Equal(t, 3, l.Len())
+	assert.Equal(t, 15, last)
 }
 
 func TestPopFirst(t *testing.T) {
-	l := New[int]()
+	l := list.New[int]()
 	l.AddLast(1)
 	l.AddLast(2)
 	l.AddLast(3)
@@ -70,66 +79,59 @@ func TestPopFirst(t *testing.T) {
 	l.AddLast(5)
 	for i := range 5 {
 		elem, err := l.PopFirst()
-		if elem != i+1 && err != nil {
-			t.Errorf("Error while Poping from head, expected %d, got %d", i+1, elem)
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, i+1, elem)
 	}
-	if l.Len() != 0 {
-		t.Errorf("Error in PopFirst operation, wrong final length epxected 0, got %d", l.Len())
-	}
+	assert.Equal(t, 0, l.Len())
 }
 
 func TestPopLast(t *testing.T) {
-	l := New[int]()
-	l.AddFirst(1)
-	l.AddFirst(2)
-	l.AddFirst(3)
-	l.AddFirst(4)
-	l.AddFirst(5)
-	l.AddFirst(6)
-	for i := range 6 {
+	l := list.New[int]()
+	const cnt = 6
+	for i := 1; i <= cnt; i++ {
+		l.AddFirst(i)
+	}
+	for i := range cnt {
 		elem, err := l.PopLast()
-		if elem != i+1 && err != nil {
-			t.Errorf("Error while Poping from tail, expected %d, got %d", i+1, elem)
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, i+1, elem)
 	}
-	if l.Len() != 0 {
-		t.Errorf("Error in PopLast operation, wrong final length epxected 0, got %d", l.Len())
-	}
+	assert.Equal(t, 0, l.Len())
 }
 
 func TestRemove(t *testing.T) {
-	l := New[int]()
-	l.AddLast(1)
-	l.AddLast(2)
-	l.AddLast(3)
-	l.AddLast(4)
-	l.AddLast(5)
-	for i := range 5 {
-		if l.Remove(i+1) != nil && l.Len() != 5-i-1 {
-			t.Errorf("Error in Remove operation")
-		}
+	l := list.New[int]()
+	const cnt = 5
+	for i := 1; i <= cnt; i++ {
+		l.AddLast(i)
 	}
-	if l.Remove(12) == nil {
-		t.Errorf("Error in Remove operation; trying remove from empty list")
+	for i := range cnt {
+		err := l.Remove(i + 1)
+		assert.NoError(t, err)
+		assert.Equal(t, cnt-i-1, l.Len())
 	}
+	err := l.Remove(12)
+	assert.ErrorIs(t, err, list.ErrNoSuchElement)
 }
 
 func BenchmarkIterateList(b *testing.B) {
-	l := New[int]()
+	l := list.New[int]()
 	for range 1000 {
 		l.AddLast(1248)
 	}
 
 	for b.Loop() {
-		for range l.ElementsIter() {
+		var elem int
+		for iterElem := range l.ElementsIter() {
+			elem = iterElem
 		}
+		_ = elem
 	}
 }
 
 func BenchmarkAddStrLast(b *testing.B) {
 	for b.Loop() {
-		l := New[string]()
+		l := list.New[string]()
 		for i := range 10000 {
 			l.AddLast("iter" + strconv.Itoa(i))
 		}
@@ -138,7 +140,7 @@ func BenchmarkAddStrLast(b *testing.B) {
 
 func BenchmarkAddLast(b *testing.B) {
 	for b.Loop() {
-		l := New[int]()
+		l := list.New[int]()
 		for i := range 10000 {
 			l.AddLast(i)
 		}
