@@ -19,7 +19,7 @@ func TestMinHeap(t *testing.T) {
 	}
 	for i := range nums {
 		elem, err := h.Pop()
-		assert.NoErrorf(t, err, "Unexpected error %v on index %v", err.Error(), i)
+		assert.NoErrorf(t, err, "Unexpected error %v on index %v", err, i)
 		assert.Equalf(t, nums[len(nums)-1-i], elem, "Wrong number, expected %v got %v", nums[len(nums)-1-i], elem)
 	}
 }
@@ -45,7 +45,7 @@ func TestMaxHeap(t *testing.T) {
 	}
 	for i := range nums {
 		elem, err := h.Pop()
-		assert.NoErrorf(t, err, "Unexpected error %v on index %v", err.Error(), i)
+		assert.NoErrorf(t, err, "Unexpected error %v on index %v", err, i)
 		assert.Equalf(t, nums[len(nums)-1-i], elem, "Wrong number, expected %v got %v", nums[len(nums)-1-i], elem)
 	}
 }
@@ -59,7 +59,7 @@ func TestMinHeapOnRandom(t *testing.T) {
 	slices.Sort(nums)
 	for i := range 100 {
 		num, err := h.Pop()
-		assert.NoError(t, err, "Unexpected error %v on index %v", err.Error(), i)
+		assert.NoError(t, err, "Unexpected error %v on index %v", err, i)
 		assert.Equalf(t, nums[i], num, "Wrong number, expected %v got %v", nums[i], num)
 	}
 }
@@ -76,7 +76,7 @@ func TestMaxHeapOnRandom(t *testing.T) {
 	slices.Sort(nums)
 	for i := range 100 {
 		num, err := h.Pop()
-		assert.NoErrorf(t, err, "Unexpected error %v on index %v", err.Error(), i)
+		assert.NoErrorf(t, err, "Unexpected error %v on index %v", err, i)
 		assert.Equalf(t, nums[99-i], num, "Wrong number, expected %v got %v", nums[i], num)
 	}
 }
