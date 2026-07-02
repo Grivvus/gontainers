@@ -1,35 +1,32 @@
-package heap
+package heap_test
 
 import (
 	"math/rand"
 	"slices"
 	"testing"
+
+	"github.com/Grivvus/gontainers/heap"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMinHeap(t *testing.T) {
-	h := NewMinHeap[int]()
+	h := heap.NewMinHeap[int]()
 	_, err := h.Pop()
-	if err == nil {
-		t.Errorf("Expected error while poping from empty heap")
-	}
+	assert.Error(t, err, "Expected error while poping from empty heap")
 	nums := []int{9, 8, 7, 6, 5, 4, 3, 2, 1}
 	for _, num := range nums {
 		h.Push(num)
 	}
 	for i := range nums {
 		elem, err := h.Pop()
-		if err != nil {
-			t.Errorf("Unexpected error %v on index %v", err.Error(), i)
-		}
-		if elem != nums[len(nums)-1-i] {
-			t.Errorf("Wrong number, expected %v got %v", nums[len(nums)-1-i], elem)
-		}
+		assert.NoErrorf(t, err, "Unexpected error %v on index %v", err.Error(), i)
+		assert.Equalf(t, nums[len(nums)-1-i], elem, "Wrong number, expected %v got %v", nums[len(nums)-1-i], elem)
 	}
 }
 
 func BenchmarkMinHeap(b *testing.B) {
 	add1000Elems := func() {
-		heap := NewMinHeap[int]()
+		heap := heap.NewMinHeap[int]()
 		for range 1000 {
 			heap.Push(1366)
 		}
@@ -41,23 +38,15 @@ func BenchmarkMinHeap(b *testing.B) {
 }
 
 func TestMaxHeap(t *testing.T) {
-	h := NewMaxHeap[int]()
-	_, err := h.Pop()
-	if err == nil {
-		t.Errorf("Expected error while poping from empty heap")
-	}
+	h := heap.NewMaxHeap[int]()
 	nums := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	for _, num := range nums {
 		h.Push(num)
 	}
 	for i := range nums {
 		elem, err := h.Pop()
-		if err != nil {
-			t.Errorf("Unexpected error %v on index %v", err.Error(), i)
-		}
-		if elem != nums[len(nums)-1-i] {
-			t.Errorf("Wrong number, expected %v got %v", nums[len(nums)-1-i], elem)
-		}
+		assert.NoErrorf(t, err, "Unexpected error %v on index %v", err.Error(), i)
+		assert.Equalf(t, nums[len(nums)-1-i], elem, "Wrong number, expected %v got %v", nums[len(nums)-1-i], elem)
 	}
 }
 
@@ -66,16 +55,12 @@ func TestMinHeapOnRandom(t *testing.T) {
 	for i := range 100 {
 		nums[i] = rand.Int() - 1_000_000_000
 	}
-	h := FromSliceMinHeap(nums)
+	h := heap.MinHeapFromSlice(nums)
 	slices.Sort(nums)
 	for i := range 100 {
 		num, err := h.Pop()
-		if err != nil {
-			t.Errorf("Unexpected error %v on index %v", err.Error(), i)
-		}
-		if num != nums[i] {
-			t.Errorf("Wrong number, expected %v got %v", nums[i], num)
-		}
+		assert.NoError(t, err, "Unexpected error %v on index %v", err.Error(), i)
+		assert.Equalf(t, nums[i], num, "Wrong number, expected %v got %v", nums[i], num)
 	}
 }
 
@@ -84,18 +69,14 @@ func TestMaxHeapOnRandom(t *testing.T) {
 	for i := range 100 {
 		nums[i] = rand.Int() - 1_000_000_000
 	}
-	h := NewMaxHeap[int]()
+	h := heap.NewMaxHeap[int]()
 	for _, num := range nums {
 		h.Push(num)
 	}
 	slices.Sort(nums)
 	for i := range 100 {
 		num, err := h.Pop()
-		if err != nil {
-			t.Errorf("Unexpected error %v on index %v", err.Error(), i)
-		}
-		if num != nums[99-i] {
-			t.Errorf("Wrong number, expected %v got %v", nums[i], num)
-		}
+		assert.NoErrorf(t, err, "Unexpected error %v on index %v", err.Error(), i)
+		assert.Equalf(t, nums[99-i], num, "Wrong number, expected %v got %v", nums[i], num)
 	}
 }

@@ -5,6 +5,8 @@ import (
 	"errors"
 )
 
+type Comparator[T any] func(T, T) bool
+
 func isSmaller[T cmp.Ordered](p1, p2 T) bool {
 	return p1 < p2
 }
@@ -13,12 +15,12 @@ func isGreater[T cmp.Ordered](p1, p2 T) bool {
 	return p1 > p2
 }
 
-type Heap[T cmp.Ordered] struct {
+type Heap[T any] struct {
 	data       []T
-	comparator func(T, T) bool
+	comparator Comparator[T]
 }
 
-func NewHeap[T cmp.Ordered](comparator func(T, T) bool) *Heap[T] {
+func NewHeap[T any](comparator Comparator[T]) *Heap[T] {
 	h := new(Heap[T])
 	h.comparator = comparator
 	return h
@@ -38,7 +40,7 @@ func NewMaxHeap[T cmp.Ordered]() *Heap[T] {
 	return h
 }
 
-func FromSliceMinHeap[T cmp.Ordered](data []T) *Heap[T] {
+func MinHeapFromSlice[T cmp.Ordered](data []T) *Heap[T] {
 	h := new(Heap[T])
 	h.data = make([]T, len(data))
 	copy(h.data, data)
