@@ -5,6 +5,8 @@ import (
 	"errors"
 )
 
+var ErrPopedFromEmpty = errors.New("can't pop from empty stack")
+
 type Stack[T any] struct {
 	data   []T
 	length int
@@ -37,7 +39,7 @@ func (s *Stack[T]) Push(elem T) {
 func (s *Stack[T]) Pop() (T, error) {
 	if s.IsEmpty() {
 		var zeroValue T
-		return zeroValue, errors.New("Can't Pop from empty stack")
+		return zeroValue, ErrPopedFromEmpty
 	}
 	s.length--
 	return s.data[s.length], nil
