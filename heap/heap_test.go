@@ -77,6 +77,6 @@ func TestMaxHeapOnRandom(t *testing.T) {
 	for i := range 100 {
 		num, err := h.Pop()
 		assert.NoErrorf(t, err, "Unexpected error %v on index %v", err, i)
-		assert.Equalf(t, nums[99-i], num, "Wrong number, expected %v got %v", nums[i], num)
+		assert.Equalf(t, nums[99-i], num, "Wrong number, expected %v got %v", nums[99-i], num)
 	}
 }

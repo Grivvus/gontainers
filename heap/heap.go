@@ -5,14 +5,14 @@ import (
 	"errors"
 )
 
-type Comparator[T any] func(T, T) bool
+type Comparator[T any] func(T, T) int
 
-func isSmaller[T cmp.Ordered](p1, p2 T) bool {
-	return p1 < p2
+func isSmaller[T cmp.Ordered](p1, p2 T) int {
+	return cmp.Compare(p1, p2)
 }
 
-func isGreater[T cmp.Ordered](p1, p2 T) bool {
-	return p1 > p2
+func isGreater[T cmp.Ordered](p1, p2 T) int {
+	return -cmp.Compare(p1, p2)
 }
 
 type Heap[T any] struct {
@@ -82,7 +82,7 @@ func (h *Heap[T]) swap(i1, i2 int) {
 func (h *Heap[T]) siftup(index int) {
 	for {
 		parent := (index - 1) / 2
-		if parent == index || !h.comparator(h.data[index], h.data[parent]) {
+		if parent == index || h.comparator(h.data[index], h.data[parent]) >= 0 {
 			break
 		}
 		h.swap(parent, index)
@@ -99,10 +99,10 @@ func (h *Heap[T]) siftdown(index int) {
 			break
 		}
 		child := j1 // left child
-		if j2 := j1 + 1; j2 < n && h.comparator(h.data[j2], h.data[j1]) {
+		if j2 := j1 + 1; j2 < n && h.comparator(h.data[j2], h.data[j1]) < 0 {
 			child = j2 // = 2*i + 2  // right child
 		}
-		if !h.comparator(h.data[child], h.data[index]) {
+		if h.comparator(h.data[child], h.data[index]) >= 0 {
 			break
 		}
 		h.swap(index, child)
